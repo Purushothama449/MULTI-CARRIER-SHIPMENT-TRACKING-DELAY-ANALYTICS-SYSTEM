@@ -108,19 +108,7 @@ export default function LiveShipmentsMap({
       return;
     }
 
-    async function fetchLiveTracking() {
-      try {
-        const res = await fetch(`/api/tracking/live?status=${encodeURIComponent(filterStatus)}`);
-        const json = await res.json();
-        if (json.shipments) {
-          setShipments(json.shipments);
-        }
-      } catch (err) {
-        console.error('Error fetching live tracking API:', err);
-      }
-    }
-
-    fetchLiveTracking();
+    
 
     if (autoRefresh) {
       const interval = setInterval(fetchLiveTracking, 30000);
