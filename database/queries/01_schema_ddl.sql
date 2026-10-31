@@ -47,17 +47,7 @@ CREATE TABLE customers (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 4. CARRIERS TABLE
-CREATE TABLE carriers (
-    id VARCHAR(36) PRIMARY KEY,
-    name VARCHAR(100) UNIQUE NOT NULL,
-    code VARCHAR(20) UNIQUE NOT NULL,
-    contact_phone VARCHAR(20) NOT NULL,
-    contact_email VARCHAR(150) NOT NULL,
-    service_type VARCHAR(50) NOT NULL CHECK (service_type IN ('Express', 'Standard', 'Same Day')),
-    on_time_rate NUMERIC(5,2) DEFAULT 0.0 CHECK (on_time_rate BETWEEN 0 AND 100),
-    status VARCHAR(20) DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'INACTIVE')),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+
 );
 
 -- 5. WAREHOUSES TABLE
