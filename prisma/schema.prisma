@@ -1,0 +1,166 @@
+// Prisma Schema for ShipTrack System
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String   @unique // ADMIN, WAREHOUSE_STAFF, CARRIER_DRIVER, CUSTOMER
+  description String?
+  users       User[]
+
+  @@map("roles")
+}
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  roleId       String
+  role         Role      @relation(fields: [roleId], references: [id])
+  customers    Customer[]
+  createdAt    DateTime  @default(now())
+
+  @@map("users")
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  userId    String?  
+  user      User?    @relation(fields: [userId], references: [id])
+  name      String
+  email     String
+  phone     String
+  company   String?
+  address   String
+  city      String
+  state     String
+  pincode   String
+  orders    Order[]
+  createdAt DateTime @default(now())
+
+  @@map("customers")
+}
+
+model Carrier {
+  id           String     @id @default(uuid())
+  name         String     @unique // BlueDart, Delhivery, DTDC, FedEx, Ecom Express
+  code         String     @unique
+  contactPhone String
+  contactEmail String
+  serviceType  String     // Express, Standard, Same Day
+  onTimeRate   Float      @default(0.0)
+  status       String     @default("ACTIVE")
+  shipments    Shipment[]
+  createdAt    DateTime   @default(now())
+
+  @@map("carriers")
+}
+
+model Warehouse {
+  id                 String      @id @default(uuid())
+  name               String      @unique // Bangalore Warehouse, Chennai Hub, etc.
+  location           String
+  city               String
+  state              String
+  capacity           Int
+  currentUtilization Int         @default(0)
+  managerName        String
+  inventories        Inventory[]
+  originShipments    Shipment[]  @relation("OriginWarehouse")
+  destShipments      Shipment[]  @relation("DestWarehouse")
+  createdAt          DateTime    @default(now())
+
+  @@map("warehouses")
+}
+
+model Inventory {
+  id              String    @id @default(uuid())
+  warehouseId     String
+  warehouse       Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  productName     String
+  sku             String    @unique
+  quantity        Int
+  minReorderLevel Int
+  updatedAt       DateTime  @updatedAt
+
+  @@map("inventory")
+}
+
+model Order {
+  id          String     @id @default(uuid())
+  orderNumber String     @unique // e.g. ORD1001
+  customerId  String
+  customer    Customer   @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  orderDate   DateTime   @default(now())
+  totalAmount Float
+  status      String     @default("PENDING") // PENDING, PROCESSING, SHIPPED, DELIVERED, CANCELLED
+  itemsCount  Int        @default(1)
+  shipments   Shipment[]
+
+  @@map("orders")
+}
+
+model Shipment {
+  id                String                  @id @default(uuid())
+  trackingNo        String                  @unique // e.g. TRK102345
+  orderId           String
+  order             Order                   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  carrierId         String
+  carrier           Carrier                 @relation(fields: [carrierId], references: [id])
+  originWarehouseId String
+  originWarehouse   Warehouse               @relation("OriginWarehouse", fields: [originWarehouseId], references: [id])
+  destWarehouseId   String?
+  destWarehouse     Warehouse?              @relation("DestWarehouse", fields: [destWarehouseId], references: [id])
+  customerName      String
+  destinationCity   String
+  expectedDelivery  DateTime
+  actualDelivery    DateTime?
+  currentStatus     String                  @default("PENDING") // PENDING, CONFIRMED, PICKED_UP, IN_TRANSIT, AT_HUB, OUT_FOR_DELIVERY, DELIVERED, DELAYED, CANCELLED
+  delayDays         Int                     @default(0)
+  currentLocation   String
+  routeLegs         RouteLeg[]
+  statusHistory     ShipmentStatusHistory[]
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @updatedAt
+
+  @@index([trackingNo])
+  @@index([currentStatus])
+  @@index([carrierId])
+  @@index([orderId])
+  @@map("shipments")
+}
+
+model RouteLeg {
+  id             String    @id @default(uuid())
+  shipmentId     String
+  shipment       Shipment  @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  sequenceNumber Int
+  fromLocation   String
+  toLocation     String
+  status         String    @default("PENDING") // PENDING, IN_PROGRESS, COMPLETED
+  departureTime  DateTime?
+  arrivalTime    DateTime?
+
+  @@map("route_legs")
+}
+
+model ShipmentStatusHistory {
+  id         String   @id @default(uuid())
+  shipmentId String
+  shipment   Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  status     String
+  location   String
+  notes      String?
+  updatedAt  DateTime @default(now())
+  updatedBy  String?
+
+  @@map("shipment_status_history")
+}
