@@ -25,7 +25,18 @@ interface SidebarProps {
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
 
-  
+  const navItems = [
+    { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { label: 'Orders', href: '/orders', icon: ShoppingBag },
+    { label: 'Shipments', href: '/shipments', icon: Truck },
+    { label: 'Tracking', href: '/tracking', icon: MapPin },
+    { label: 'Carriers', href: '/carriers', icon: Building },
+    { label: 'Warehouses', href: '/warehouses', icon: Store },
+    { label: 'Analytics', href: '/analytics', icon: BarChart3 },
+    { label: 'Reports', href: '/reports', icon: FileText },
+    { label: 'Users', href: '/users', icon: Users },
+    { label: 'Settings', href: '/settings', icon: Settings },
+  ];
 
   return (
     <>
