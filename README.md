@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # ShipTrack - Multi-Carrier Shipment Tracking & Delay Analytics System
 
 **DBMS Level-3 Project**
@@ -7,7 +7,7 @@ ShipTrack is a production-ready, full-stack enterprise logistics web application
 
 ---
 
-## 🌟 Executive Summary & Features
+## Executive Summary & Features
 
 - **Exact Visual Replica of Reference SaaS Dashboard**: Dark navy sidebar, top search header, date picker, 5 interactive KPI cards, Recharts trend area chart, status donut distribution, carrier performance SLA progress bars, recent shipments table, delayed shipments summary, Leaflet India map, MongoDB tracking events stream, and system alerts.
 - **Dual-Database DBMS Architecture**:
@@ -25,7 +25,7 @@ ShipTrack is a production-ready, full-stack enterprise logistics web application
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 - **Frontend**: Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS
 - **Charts**: Recharts
@@ -37,7 +37,7 @@ ShipTrack is a production-ready, full-stack enterprise logistics web application
 
 ---
 
-## 📁 Dedicated Database Scripts (`database/queries/`)
+##  Dedicated Database Scripts (`database/queries/`)
 
 - `01_schema_ddl.sql`: Complete DDL schema creation with PK, FK, NOT NULL, CHECK, UNIQUE.
 - `02_triggers_and_functions.sql`: Stored function `calculate_delay()` and Trigger `log_shipment_status_change()`.
@@ -47,7 +47,7 @@ ShipTrack is a production-ready, full-stack enterprise logistics web application
 
 ---
 
-## 🚀 Installation & Setup Instructions
+##  Installation & Setup Instructions
 
 ### 1. Environment Configuration
 Create `.env` file based on `.env.example`:
@@ -303,7 +303,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 🧪 Production Build Verification
+##  Production Build Verification
 To test production build:
 ```bash
 npm run build
