@@ -33,7 +33,10 @@ export default function LoginPage() {
     }
   };
 
- 
+  const fillDemoUser = (demoEmail: string) => {
+    setEmail(demoEmail);
+    setPassword('password123');
+  };
 
   return (
     <div className="min-h-screen bg-[#0B132B] flex items-center justify-center p-4 relative overflow-hidden">
